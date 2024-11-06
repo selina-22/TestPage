@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="w-[100vw] h-[100vh] bg-[#1e1e1e]">
+      <div
+        id="main-container"
+        class="flex flex-row items-center gap-5 p-5 h-[12rem]"
+      >
+        <!-- Autopilot Container  -->
+        <div
+          id="autopilot"
+          class="flex-2 flex flex-col gap-3 items-center justify-center bg-transparent border-white border-2 rounded-xl pb-3 px-10 h-full"
+        >
+          <span class="text-white text-bold text-xl">Autopilot</span>
+          <div
+            id="power-button-container"
+            class="relative p-4 border-4 border-[#dafef2] rounded-full"
+          >
+            <div class="glow-background absolute inset-0 rounded-full"></div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20px"
+              height="20px"
+              viewBox="0 0 24 24"
+              fill="none"
+              class="power-button relative z-10"
+            >
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M12 3V12M18.3611 5.64001C19.6195 6.8988 20.4764 8.50246 20.8234 10.2482C21.1704 11.994 20.992 13.8034 20.3107 15.4478C19.6295 17.0921 18.4759 18.4976 16.9959 19.4864C15.5159 20.4752 13.776 21.0029 11.9961 21.0029C10.2162 21.0029 8.47625 20.4752 6.99627 19.4864C5.51629 18.4976 4.36274 17.0921 3.68146 15.4478C3.00019 13.8034 2.82179 11.994 3.16882 10.2482C3.51584 8.50246 4.37272 6.8988 5.6311 5.64001"
+                  stroke="#dafef2"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
+            </svg>
+          </div>
+          <span class="text-white text-bold text-xl">Enabled</span>
+        </div>
+        <!-- Savings Container  -->
+        <div
+          id="savings"
+          class="flex-1 flex flex-row justify-between items-center bg-[#4b4b4b] rounded-xl p-4 h-full"
+        >
+          <div id="stat" class="flex flex-col gap-2">
+            <span class="text-white text-bold text-3xl">Savings Summary</span>
+            <div class="flex flex-row gap-5 items-center">
+              <div class="w-[10px] h-[10px] rounded-full bg-[#53a998]"></div>
+              <span class="text-white font-normal text-xs">Approved</span>
+              <span class="text-white font-bold text-xs">$ 1,000,000</span>
+            </div>
+            <div class="flex flex-row gap-5 items-center">
+              <div class="w-[10px] h-[10px] rounded-full bg-[#eb6754]"></div>
+              <span class="text-white font-normal text-xs">Unapproved</span>
+              <span class="text-white font-bold text-xs">$ 1,000,000</span>
+            </div>
+          </div>
+          <div id="graph" class="px-5">
+            <canvas id="myChart" class="w-[8rem]"></canvas>
+          </div>
+        </div>
+        <!-- Annual Expenditure Container  -->
+        <div
+          id="annual-expenditure"
+          class="flex-1 flex flex-col bg-[#4b4b4b] rounded-xl justify-between px-5 pt-4 pb-8 h-full"
+        >
+          <span class="text-white font-normal text-3xl"
+            >Annual Expenditure</span
+          >
+          <span class="text-white font-bold text-4xl">$ 1,000,000</span>
+        </div>
+        <!-- Annual Savings Container  -->
+        <div
+          id="annual-savings"
+          class="flex-1 flex flex-col bg-[#4b4b4b] rounded-xl justify-between px-5 pt-4 pb-8 h-full"
+        >
+          <span class="text-white font-normal text-3xl">Annual Savings</span>
+          <span class="text-white font-bold text-4xl">$ 677,000</span>
+        </div>
+        <svg
+          width="30px"
+          height="30px"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+        >
+          <!-- Top Arrow -->
+          <path
+            d="M6 8L12 2L18 8"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+
+          <!-- Bottom Arrow -->
+          <path
+            d="M6 16L12 22L18 16"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    const ctx = document.getElementById("myChart").getContext("2d");
+
+    const gradient1 = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient1.addColorStop(0, "rgba(46, 204, 113, 1)"); // Green
+    gradient1.addColorStop(1, "rgba(52, 152, 219, 1)"); // Blue
+
+    const gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient2.addColorStop(0, "rgba(231, 76, 60, 1)"); // Red
+    gradient2.addColorStop(1, "rgba(155, 89, 182, 1)"); // Purple
+    new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: ["Red", "Blue"],
+        datasets: [
+          {
+            label: "# of Votes",
+            data: [2, 19],
+            borderWidth: 0,
+            backgroundColor: ["#d96e5f", "#3bb599"],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "75%",
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        scales: {
+          x: {
+            display: false,
+          },
+          y: {
+            display: false,
+          },
+        },
+      },
+    });
+  </script>
+
+  <style>
+    .power-button {
+      filter: drop-shadow(0 0 25px rgba(34, 197, 94, 0.8));
+    }
+    .glow-background {
+      background: radial-gradient(
+        circle at center,
+
+        rgba(34, 197, 94, 0.1) 30%,
+        rgba(34, 197, 94, 0.05) 40%,
+        rgba(34, 197, 94, 0.025) 50%,
+        rgba(34, 197, 94, 0.01) 60%,
+        transparent 100%
+      );
+      transform: scale(2.6);
+    }
+
+    * {
+      font-family: "Open Sans", sans-serif;
+      font-optical-sizing: auto;
+      font-variation-settings: "wdth" 100;
+    }
+  </style>
+</html>
